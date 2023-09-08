@@ -5,4 +5,4 @@ SUSY phenomenology on LHC
 
 当前任务：控制 prospino2 的类
 
-# 请把更新提交到 dev-prospino 分支，不要提交到 main 分支。
+# 推送代码发起 Pull request 时一定要新建分支，不要提交到 main 分支，会影响代码审核和合并的工作量。
