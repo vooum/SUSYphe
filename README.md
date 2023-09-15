@@ -1,11 +1,45 @@
 # SUSYphe
+
 SUSY phenomenology on LHC
 
 这个项目的目的是重写 prospino-smodels-madgraph-checkmate 的自动化程序。
 
 当前任务：控制 prospino2 的类
 
-# 推送代码发起 Pull request 时一定要新建分支，不要推送到 main 分支，否则会影响代码审核和合并的工作量。
+**推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
+
+## 2023/09/15
+
+更新流程图，以函数功能作为其基本组成单元，使其表达的更清晰。
+
+现在目标就是先让 Prospino 正确地运行某一个参数点的某一个截面，得出结果，但是目前先不涉及收集结果的操作。下面的每一个方框代表一个函数的功能，如果有必要也可以适当把复数功能整合进一个函数。
+
+```mermaid
+graph TB
+    A[读取 slhaReaderOutput.csv] --> B[根据 Index 找到对应输入文件 ProspinoIn_Index.txt];
+    B-->C[以 Index=1 为例, 把 ProspinoIn_1.txt 转换为 prospino.in.les_houches];
+    C-->D[运行 prospino_2.run 适当打印结果];
+```
+
+同时更新的还有一个名字暂定为 `Our_Program` 的文件夹，相关的文件结构都已经配置好，Prospino2 也已经安装好，并编译为计算 $\tilde{\chi}_1^- \bar{\tilde{\chi}}_1^+$ 截面，因此只需要完成流程图内程序的编写，完成测试即可。
+
+流程图中提到的功能可以参考 `Test_Point/Reference/cs_smodels_nmssm_staustau.py` 文件中第 13 行，第 31 或 39 行，以及第 47 行的函数中的某些写法。
+
+**现在的文件结构是：**
+
+```text
+Our_Program/
+├── Program_CrossSection.py
+├── Prospino_Input/
+│   ├── ProspinoIn_1.txt
+├── Prospino2/
+│   ├── prospino_main.f90
+│   ├── prospino.in.les_houches
+│   ├── prospino.dat
+│   └── prospino_2.run
+├── Prospino2.tar.gz
+└── slhaReaderOutput.csv
+```
 
 ## 2023/09/08
 
