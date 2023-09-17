@@ -8,6 +8,10 @@ Prospino2 是一个计算强子对撞机中 `MSSM` 超对称粒子(次)领头阶
 
 <https://www.thphys.uni-heidelberg.de/~plehn/index.php?show=prospino>
 
+## 安装方法
+
+下载后解压，编译后即可使用。编译方法为在文件主目录内使用 `make` 指令。
+
 ## Prospino2 文件说明
 
 该程序最重要的几个文件分别是
