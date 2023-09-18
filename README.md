@@ -8,6 +8,38 @@ SUSY phenomenology on LHC
 
 **推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
 
+## 2023/09/18
+
+更新流程图，设定新的目标，<font color="#90EE90"><b>浅绿色方框</b></font> 中的内容为新的目标
+
+```mermaid
+graph TB
+    A[读取数据，计算截面] --> B[从 prospino.dat 中读取结果];
+    B --> C[将数据写入一个 pd.DataFrame 表格中];
+    C --> D[将表格导出成 CrossSection.csv];
+    style A fill:#f9f,stroke:#333,stroke-width:4px
+    style B fill:#90EE90
+    style C fill:#90EE90
+    style D fill:#90EE90
+```
+
+**现在的文件结构是：**
+
+```text
+Our_Program/
+├── Program_CrossSection.py
+├── Prospino_Input/
+│   ├── ProspinoIn_1.txt
+├── Prospino2/
+│   ├── prospino_main.f90
+│   ├── prospino.in.les_houches
+│   ├── prospino.dat
+│   └── prospino_2.run
+├── Prospino2.tar.gz
+├── CrossSection.csv
+└── slhaReaderOutput.csv
+```
+
 ## 2023/09/15
 
 更新流程图，以函数功能作为其基本组成单元，使其表达的更清晰。
