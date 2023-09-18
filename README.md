@@ -10,11 +10,11 @@ SUSY phenomenology on LHC
 
 ## 2023/09/18
 
-更新流程图，设定新的目标，<font color="#90EE90"><b>浅绿色方框</b></font> 中的内容为新的目标
+更新流程图，设定新的目标，**浅绿色方框** 中的内容为新的目标
 
 ```mermaid
 graph TB
-    A[读取数据，计算截面] --> B[从 prospino.dat 中读取结果];
+    A[读取数据, 计算截面] --> B[从 prospino.dat 中读取结果];
     B --> C[将数据写入一个 pd.DataFrame 表格中];
     C --> D[将表格导出成 CrossSection.csv];
     style A fill:#f9f,stroke:#333,stroke-width:4px
