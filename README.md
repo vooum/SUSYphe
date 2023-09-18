@@ -17,10 +17,10 @@ graph TB
     A[读取数据, 计算截面] --> B[从 prospino.dat 中读取结果];
     B --> C[将数据写入一个 pd.DataFrame 表格中];
     C --> D[将表格导出成 CrossSection.csv];
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style B fill:#90EE90
-    style C fill:#90EE90
-    style D fill:#90EE90
+    style A fill:#f9f,stroke:#333,stroke-width:4px;
+    style B fill:#90EE90;
+    style C fill:#90EE90;
+    style D fill:#90EE90;
 ```
 
 **现在的文件结构是：**
