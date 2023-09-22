@@ -21,7 +21,7 @@ class package(object):
     def Get_ProspinoInput(self
             ,data: pd.DataFrame
             ,IndexList: pd.Series):
-        self.IndexList = self.data["Index"]
+        #self.IndexList = self.data["Index"]
         Index = self.IndexList[0]
         self.ProspinoInDir = os.path.join(self.package_dir, "Prospino_Input/ProspinoIn_{}.txt".format(Index))
         print(isinstance(self.ProspinoInDir, str))
@@ -54,9 +54,6 @@ class package(object):
         df = pd.DataFrame(cs1)
         df.to_csv('CrossSection.csv', header=False, index=False)
 
-
-
-
     def main(self):
         self.slha_dir = os.path.join(self.package_dir, "slhaReaderOutPut.csv")
         self.data = self.Read_CSV(self.slha_dir)
@@ -65,7 +62,6 @@ class package(object):
         self.ProspinoInDir = self.Get_ProspinoInput(self.data, self.IndexList)
         print(type(self.ProspinoInDir))
         #print(isinstance(self.ProspinoInDir, str))
-
         #self.Make_ProspinoIn(self.ProspinoInDir)
         self.Exec_Prospino(self.ProspinoInDir)
         self.Write_CS()
