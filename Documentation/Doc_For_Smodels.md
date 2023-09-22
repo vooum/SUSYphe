@@ -107,3 +107,17 @@ pip install --user smodels
 ### Smodels Database 的安装
 
 `Smodels` 数据库包含 LHC 相关的数据，`Smodels` 正是通过对比简化模型的拓扑结构以及数据库信息从而得出对特定模型的 LHC 限制。
+
+以下载源代码安装为例，解压后的文件夹中存在一个名为 `parameters.ini` 的文件，这是 `Smodels` 的配置文件。其中有一项配置是 `[database]`，该项配置负责设定数据库文件所在的位置。
+
+刚刚下载安装的 `Smodels` 不自带数据库，均需要进行安装，一共有两种安装方法。
+
+#### 使用内置的官方链接
+
+最简单的方式是使用官方内置的链接作为数据库路径，这种方式需要确保网络连接通畅，能够连接到 `Smodels Database` 的网络地址。设置配置文件中的 `[database]` 项为：
+
+```ini
+path = official
+```
+
+在这种情况下，运行 `Smodels` 会自动下载相应版本的数据库文件。默认情况下，数据库会被下载到 `.cache/smodels/` 目录下，
