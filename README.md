@@ -18,7 +18,7 @@ SUSY phenomenology on LHC
 graph TB
     A[读取数据] --> B[判断 Siglino 类型];
     B -->|计算相应情况的 ElectroWeakino 截面| C[计算截面];
-    C -->|某些 Siglino 类型个别截面不计算，指定为 0| D[收集结果];
+    C -->|某些 Siglino 类型个别截面不计算, 指定为 0| D[收集结果];
     D -->|循环足够的次数把相应截面全都计算完| B;
     style A fill:#f9f,stroke:#333,stroke-width:4px;
     style B fill:#90EE90;
