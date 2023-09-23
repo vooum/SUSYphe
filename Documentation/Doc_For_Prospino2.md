@@ -8,6 +8,10 @@ Prospino2 是一个计算强子对撞机中 `MSSM` 超对称粒子(次)领头阶
 
 <https://www.thphys.uni-heidelberg.de/~plehn/index.php?show=prospino>
 
+## 安装方法
+
+下载后解压，编译后即可使用。编译方法为在文件主目录内使用 `make` 指令。
+
 ## Prospino2 文件说明
 
 该程序最重要的几个文件分别是
@@ -214,3 +218,71 @@ Prospino2 是一个计算强子对撞机中 `MSSM` 超对称粒子(次)领头阶
 该文件的使用方法为直接执行，例如当位于该文件的同一级目录时，执行命令为 **`./prospino_2.run`**。
 
 直接运行时会有很多信息打印在屏幕上，如果不希望这些信息被打印出来，则可以使用诸如 **`./prospino_2.run > a.txt`** 这样的命令，把输出信息存放在一个名为 `a.txt` 的文件中。
+
+### 输入文件 prospino.in.les_houches
+
+这是一个标准的 SLHA 格式文件，其中包含的主要内容有**粒子质量谱，混合矩阵**等信息。
+
+运行 `prospino_2.run` 后 `Prospino` 程序就从这个文件中读取信息。`prospino_main.f90` 中指定好具体的末态粒子类型后，程序也是从 `prospino.in.les_houches` 中根据相应粒子的粒子编号获取质量信息。
+
+### 输出文件
+
+当截面计算结束后，计算的结果会存放在下面的输出文件中。
+
+#### prospino.dat
+
+运行 `prospino_2.run` 后，等待些许时间计算方可结束，此时结果就被存放在一个名为 `prospino.dat` 的文件中，这个文件的内容是如下一个类似表格的形式：
+
+```text
+nn  5  7     0.0    0.0    1.0  107.5  107.5  0.000  5.28     0.761E-03  6.92     0.615E-03 1.3091  5.50      7.21    
+
+    i1 i2  dummy0 dummy1 scafac  m1    m2      angle LO[pb]   rel_error NLO[pb]   rel_error   K    LO_ms[pb] NLO_ms[pb]  
+```
+
+第一行为数值结果，第二行为第一行的补充信息。
+
+- 最开始的 `nn` 表示末态产生模式。
+- `5`, `7` 对应 `i1 i2` 表示具体的末态粒子类型。
+- `scafac` 表示能标因子。
+- `m1 m2` 表示输入文件中对应的 `nn` 模式 `5 7` 粒子的质量。
+- `angle` 表示混合角，为 0 时没有混合。
+- `LO[pb]` 表示考虑 `squark` 质量简并时的领头阶截面，单位为 `pb`。紧随其后的 `rel_error` 表示该数值的相对误差。
+- `NLO[pb]` 表示考虑 `squark` 质量简并时的次领头阶截面，单位为 `pb`。紧随其后的 `rel_error` 表示该数值的相对误差。
+- `K` 表示 `K 因子`，即次领头阶截面大小与领头阶截面大小的比值。
+- `LO_ms[pb]` 表示**不**考虑 `squark` 质量简并假设时的领头阶截面，单位为 `pb`。
+- `NLO_ms[pb]` 表示**不**考虑 `squark` 质量简并假设时的次领头阶截面，单位为 `pb`。
+- 暂时不清楚 `dummy0 dummy1` 的具体含义。
+
+需要注意的是，如无特殊需要，请使用 `LO_ms[pb]` 和 `NLO_ms[pb]` 作为输出数值结果。
+
+#### prospino.dat2 和 prospino.dat3
+
+这两个文件也是输出文件，相比 `prospino.dat` 它们包含了更多的信息。`prospino.dat2` 包含了所有的质量信息，`prospino.dat3` 则包括了几乎所有输入参数和输入文件信息。
+
+### 其余文件
+
+除了上述文件之外，还有一些对 `Prospino2` 十分重要，但是绝大多数情况下不需要修改的文件。
+
+#### Xvital.f90
+
+该文件存放着标准模型的输入参数，绝大多数情况下不需要修改。
+
+#### Xprospino_subroutine.f90
+
+该程序用于解析输入文件，因此该文件与输入文件的具体数据格式有关，在使用其提供的标准文件的情况下，该文件也不需要修改。
+
+## Prospino2 额外的特殊计算情况
+
+`Prospino2` 是一个只能计算 `MSSM` 模型粒子产生截面的程序，也就是说它只支持 4 个 `neutralinos` 的产生，而超对称的大多数衍生模型并不是这种最简情形。同时 `Prospino2` 在 `prospino_main.f90` 中的程序设置上显示只能设置第一代和第三代标轻子产生过程作为计算截面。
+
+### neutralinos 部分
+
+以 `NMSSM` 模型为例，由于有 `siglino` 的存在所以一共存在 5 个 `neutralinos`，此时如果想使用 `Prospino2` 计算截面则需要将 `NMSSM` 的 `neutralinos` 部分退化为 `MSSM` 的情况，这要求 `Electroweakinos` 之间的混合效应不大。在满足混合不大的前提下，具体的操作方法为，舍去 `siglino` 以及 `siglino` 为主要成分的 `neutralino`。举例来说，如果 $\tilde{\chi}_1^0$ 为 `siglino` 则混合矩阵需要去掉第一行以及第五列，这样就可以从 `5X5` 的矩阵退化为 `4X4` 的矩阵，如果 $\tilde{\chi}_2^0$ 为 `siglino` 则需要去掉第二行以及第五列。
+
+### Smuon 相关截面的计算
+
+在 `prospino_main.f90` 中的 `ipart1_in & ipart2_in` 部分可以看到，末态粒子类型只能选择第一代和第三代标轻子，而没有第二代标轻子 `Smuon` 的选项。由于 `Smuon` 和 `Selectron` 所参与的相互作用完全一样，所以这个问题的解决方法是，在 `prospino.in.les_houches` 中将 `Smuon` 的质量信息填入到 `Selectron` 对应的位置。此时如果选择计算 `Selectron` 相关的产生截面，那么实际上计算的其实是 `Smuon` 相关的产生截面。
+
+例如，现在假设 `Selectron` 和 `Smuon` 的质量分别为 `100 GeV` 和 `200 GeV`。此时如果要计算左手 `Selectron` 对儿产生截面，则在 `prospino.in.les_houches` 文件中的 `1000011` 位置填入 `100 GeV`。如果要计算左手 `Smuon` 对儿产生截面，则需要在 `1000011` 位置填入 `200 GeV`。
+
+其余的诸如右手标轻子，标中微子信息也是同样的处理方法。
