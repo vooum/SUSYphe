@@ -8,6 +8,43 @@ SUSY phenomenology on LHC
 
 **推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
 
+## 2023/09/23
+
+更新流程图和文件结构，**浅绿色方框**中的内容为新的目标
+
+总的来说就是，分类讨论 Siglino 为不同 neutralino 时的情况，计算相关截面并处理某些情况下跳过某些截面的情况
+
+```mermaid
+graph TB
+    A[读取数据] --> B[判断 Siglino 类型];
+    B -->|计算相应情况的 ElectroWeakino 截面| C[计算截面];
+    C -->|某些 Siglino 类型个别截面不计算，指定为 0| D[收集结果];
+    D -->|循环足够的次数把相应截面全都计算完| B;
+    style A fill:#f9f,stroke:#333,stroke-width:4px;
+    style B fill:#90EE90;
+    style C fill:#f9f,stroke:#333,stroke-width:4px;
+    style D fill:#f9f,stroke:#333,stroke-width:4px;
+```
+
+下面的文件结构仅供参考
+
+```text
+Our_Program/
+├── Program_CrossSection.py
+├── Prospino_Input/
+│   └── ProspinoIn_1.txt
+├── Cross_Section/
+│   └── Prospino2_*/
+│      └── prospino_2.run
+├── Prospino_Run/
+│   ├── Pro2_subroutines/
+│   ├── prospino.in.les_houches
+│   └── prospino.dat
+├── Results/
+│   └── CrossSection.csv
+└── slhaReaderOutput.csv
+```
+
 ## 2023/09/18
 
 更新流程图，设定新的目标，**浅绿色方框** 中的内容为新的目标
