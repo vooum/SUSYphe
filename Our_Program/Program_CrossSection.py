@@ -70,4 +70,3 @@ class package(object):
 if __name__ == '__main__':
     package_instance = package(package_name="example_package")
     package_instance.main()
-    
