@@ -120,4 +120,4 @@ pip install --user smodels
 path = official
 ```
 
-在这种情况下，运行 `Smodels` 会自动下载相应版本的数据库文件。默认情况下，数据库会被下载到 `.cache/smodels/` 目录下，
+在这种情况下，运行 `Smodels` 会自动下载相应版本的数据库文件。默认情况下，数据库会被下载到用户的 `.cache/smodels/` 目录下。如果想把数据库缓存至其他位置，则需要设置环境变量 `SMODELS_CACHEDIR` 数据库会缓存至该环境变量所指向的目录。
