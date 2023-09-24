@@ -2,7 +2,7 @@
 
 **作者：** 贾兴隆
 
-`Smodels` 是一个使用 LHC 数据限制粒子物理简化模型的 `Python` 自动化工具，目前最新版本的 `Smodels` 对 `Python` 版本的要求为 **3.6** 及以上。它的运行流程整体上分为两个步骤。第一步是将 BSM 模型拆解为简化模型的拓扑情形。第二步是根据 LHC 数据对这些拓扑情形做出限制。
+`Smodels` 是一个使用 LHC 数据限制粒子物理简化模型的 `Python` 自动化工具，目前最新版本的 `Smodels` 对 `Python` 版本的要求为 **3.6** 及以上。它的运行流程整体上分为两个步骤。第一步是将 BSM 模型拆解为简化模型的拓扑情形。第二步是根据 LHC 数据对这些拓扑情形做出限制。鉴于 `Smodels` 是一个规模庞大的程序包，所以本文档只讨论最必要的内容，至于其余的内容欢迎大家共同添加。
 
 ## Smodels 官方网站
 
@@ -104,20 +104,55 @@ pip install --user smodels
 
 这种方式只推荐比较有经验的 `Python` 使用者使用。
 
-### Smodels Database 的安装
+### Smodels Database
 
 `Smodels` 数据库包含 LHC 相关的数据，`Smodels` 正是通过对比简化模型的拓扑结构以及数据库信息从而得出对特定模型的 LHC 限制。
 
-以下载源代码安装为例，解压后的文件夹中存在一个名为 `parameters.ini` 的文件，这是 `Smodels` 的配置文件。其中有一项配置是 `[database]`，该项配置负责设定数据库文件所在的位置。
+#### 数据库的类型
 
-刚刚下载安装的 `Smodels` 不自带数据库，均需要进行安装，一共有两种安装方法。
+`Smodels` 数据库一共有两种类型的数据，分别是 `UL` 类型和 `EM` 类型。
+
+- `UL` 类型是 `Smodels` 中大多数数据的数据类型，指的是以产生截面的上限来作为限制的来源。
+- `EM` 类型是以产生效率来作为限制的来源。
+
+这部分可以详见：<https://smodels.readthedocs.io/en/stable/DatabaseDefinitions.html#emtype>
+
+#### Smodels Database 的安装方法
+
+新下载安装的 `Smodels` 不自带数据库，需要进行安装。
+
+以下载源代码安装为例，解压后的文件夹中存在一个名为 `parameters.ini` 的文件，这是 `Smodels` 的配置文件。其中有一项配置是 `[database]`，该项配置负责设定数据库文件所在的位置。具体的安装方法有两种。
 
 #### 使用内置的官方链接
 
-最简单的方式是使用官方内置的链接作为数据库路径，这种方式需要确保网络连接通畅，能够连接到 `Smodels Database` 的网络地址。设置配置文件中的 `[database]` 项为：
+最简单的方式是使用官方内置的链接作为数据库路径，这种方式需要确保网络连接通畅，能够连接到 `Smodels Database` 的网络地址。设置配置文件中的 `[database]` 项为以下内容即可：
 
 ```ini
 path = official
 ```
 
-在这种情况下，运行 `Smodels` 会自动下载相应版本的数据库文件。默认情况下，数据库会被下载到用户的 `.cache/smodels/` 目录下。如果想把数据库缓存至其他位置，则需要设置环境变量 `SMODELS_CACHEDIR` 数据库会缓存至该环境变量所指向的目录。
+在这种情况下，运行 `Smodels` 会自动下载相应版本的数据库二进制文件。默认情况下，数据库会被下载到用户的 `.cache/smodels/` 目录下。如果想把数据库缓存至其他位置，则需要设置环境变量 `SMODELS_CACHEDIR`，数据库会缓存至该环境变量所指向的目录。
+
+从 v2.2.0 版本开始，部分 `EM` 类型的数据在官方数据库中被进行了整合和汇总，这能加快运行速度。如果不想使用整合后的数据，可以使用以下命令安装数据库
+
+```ini
+path = official+nonaggregated
+```
+
+#### 手动下载数据库
+
+另一种方式是自行前往数据库的 GitHub 地址下载数据库
+
+数据库的 GitHub 地址是：<https://github.com/SModelS/smodels-database-release>
+
+下载后可解压至任意位置，只需要在 `[database]` 项中指定与参数文件的相对路径或绝对路径即可，例如，若数据库文件放置于与参数文件同一级目录的话：
+
+```ini
+path = ./smodels-database/
+```
+
+同样的，如果不想使用被整合的 `EM` 类型数据，则解压   `smodels-database` 中的 `nonaggregated220.tar.gz` 文件即可。
+
+如果选择这种方式安装数据库，那么安装完成后首次运行 `Smodels` 时，`Smodels` 会自动使用数据库中的文本文件生成二进制文件。
+
+### 运行 Smodels
