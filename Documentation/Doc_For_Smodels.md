@@ -1,10 +1,10 @@
-# Smodels2 说明文档
+# SModelS2 说明文档
 
 **作者：** 贾兴隆
 
 `SmodelS` 是一个使用 LHC 数据限制粒子物理简化模型的 `Python` 自动化工具，目前最新版本的 `SmodelS` 对 `Python` 版本的要求为 **3.6** 及以上。它的运行流程整体上分为两个步骤。第一步是将 BSM 模型拆解为简化模型的拓扑情形。第二步是根据 LHC 数据对这些拓扑情形做出限制。鉴于 `SmodelS` 是一个规模庞大的程序包，所以本文档暂时只讨论最必要的内容，至于剩余的内容欢迎大家共同添加。
 
-## Smodels 官方网站
+## SModelS 官方网站
 
 - 官网：<https://smodels.github.io/>
 - 用户手册：<https://smodels.readthedocs.io/en/stable/>
@@ -13,7 +13,7 @@
 
 ## 安装方法
 
-### Smodels 的依赖
+### SModelS 的依赖
 
 `SmodelS` 是一个使用 `Python` 语言编写的程序包，同时也用到了许多 `Python` 的扩展模块。因此在安装和使用 `SmodelS` 之前首先，要确保 `Python` 以及这些依赖项的版本要求得到了满足，可以使用 `pip install` 或者 `conda install` 命令安装这些依赖，也可以通过使用 `setuptools` 的方式安装 `SmodelS` 以避免逐一安装这些依赖项。
 
@@ -42,7 +42,7 @@
 - 数据库浏览功能需要安装 `IPython`。
 - 交互式绘图功能需要安装 `plotly` 以及 `Pandas`。
 
-### Smodels 的安装
+### SModelS 的安装
 
 在安装完所有必要的依赖后就可以开始安装 `SmodelS` 了，一共有三种方法可以安装。
 
@@ -104,7 +104,7 @@ pip install --user smodels
 
 这种方式只推荐比较有经验的 `Python` 使用者使用。
 
-### Smodels Database
+### SModelS Database
 
 `SmodelS` 数据库包含 LHC 相关的数据，`SmodelS` 正是通过对比简化模型的拓扑结构以及数据库信息从而得出对特定模型的 LHC 限制。
 
@@ -117,7 +117,7 @@ pip install --user smodels
 
 这部分可以详见：<https://smodels.readthedocs.io/en/stable/DatabaseDefinitions.html#emtype>
 
-#### Smodels Database 的安装方法
+#### SModelS Database 的安装方法
 
 新下载安装的 `SmodelS` 不自带数据库，需要进行安装。
 
@@ -125,7 +125,7 @@ pip install --user smodels
 
 #### 使用内置的官方链接
 
-最简单的方式是使用官方内置的链接作为数据库路径，这种方式需要确保网络连接通畅，能够连接到 `Smodels Database` 的网络地址。设置配置文件中的 `[database]` 项为以下内容即可：
+最简单的方式是使用官方内置的链接作为数据库路径，这种方式需要确保网络连接通畅，能够连接到 `SModelS Database` 的网络地址。设置配置文件中的 `[database]` 项为以下内容即可：
 
 ```ini
 path = official
@@ -155,7 +155,7 @@ path = ./smodels-database/
 
 如果选择这种方式安装数据库，那么安装完成后首次运行 `SmodelS` 时，`SmodelS` 会自动使用数据库中的文本文件生成二进制文件。
 
-### 使用 Smodels
+### 使用 SModelS
 
 `SmodelS` 可以接收 SLHA 以及 LHE 格式的文件作为输入，并提供了包括命令行工具，以及自定义脚本在内的两种运行方式。如果输入模型为非 `MSSM` 模型，用户可能需要自行在 `model.py` 中定义 BSM 粒子。
 
@@ -187,8 +187,46 @@ SCALE_SCHEME QCD_ORDER EW_ORDER KAPPA_F KAPPA_R  PDF_ID VALUE CODE VERSION
     1: 固定标度
     2: 标度设定为质心能
     3: 标度为末态粒子的横向质量
-- QCD_ORDER: QCD 修正阶数
+- QCD_ORDER: 一个整数，QCD 修正阶数
+    0: 初始截面
+    1: NLO 截面
+    2: NLO + NLL 截面
+- EW_ORDER: 电弱修正阶数，同上
+- KAPPA_F: 因子化标度，如果 SCALE_SCHEME 设为 1，则此处必须提供相应信息
+- KAPPA_R: 重整化标度
+- PDF_ID: 部分子分布函数 LHAPDF 编号
+- VALUE: 一个浮点数，表示截面值
+- CODE: 表示计算截面的程序名字，不影响计算
+- VERSION: SModelS 的版本号，不影响计算
 
 下面是一个来自 `SmodelS` 官网的具体例子
 
+<https://smodels.readthedocs.io/en/stable/BasicInput.html>
+
 ![xsecBlock](./xsecBlock.jpg)
+
+这个例子表示质心能 8 TeV 下 $p p \to \tilde{u}^\ast_L + \tilde{g}$ 过程的截面信息 Block。
+
+#### 命令行工具 runSModelS.py
+
+主目录下存在一个 `runSModelS.py` 文件，这个文件其实是在调用 `smodels/tools/runSModelS.py` 它接收一些命令行参数从而实现类似二进制文件的功能。
+
+它的运行方式为：
+
+```bash
+runSModelS.py [-h] -f FILENAME [-p PARAMETERFILE] [-o OUTPUTDIR] [-d] [-t] [-C] [-V] [-c] [-v VERBOSE] [-T TIMEOUT]
+```
+
+这些参数的含义分别是：
+
+- -h: 输出帮助信息
+- -f: 指定 SLHA 或 LHE 输入文件，如果指定的是一个文件夹，则会循环运行文件夹下的所有文件。
+- -p: 指定参数配置文件，如果未设置则会使用 `smodels/etc/parameters_default.ini` 作为参数配置文件
+- -o: 指定输出文件的路径，默认路径为 `./results/`
+- -d: 使用开发模式运行
+- -t: 强制加载文本数据库
+- -C: 使输出带有颜色
+- -V: 展示 `SModelS` 的版本
+- -c: 解析崩溃报告文件，并将其用于 `SModelS` 的运行，通过 `– filename myfile.crash` 提供
+- -v: 展示冗余信息（调试，信息，警告，报错）
+- -T: 设定超时时间，如果没有设置就没有超时时间。对于输入一个文件夹的情况，超时时间会应用于文件夹下的每一个文件
