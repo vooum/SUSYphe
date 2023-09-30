@@ -2,19 +2,26 @@
 
 # Written by 贺杨乐， 2023/09/30
 # 示例：
-# ## 初始化一个 GenerateInputFile 的实例：in_file
-# point = {'MASS':{25,125.01}} # 样本点，包含需要改变的参数
-# with open(input_file_mold, 'r') as in_mold:
+# ## 设置一个样本点，明确哪些数据需要修改
+# point = {'MASS': {25: 125.01}, 'NMIX': {(1,1): 0.9} } # 样本点，包含需要改变的参数
+# ### 注意：
+# ### 样本点是两层的 dict, 
+# ### 第一层的 key 是 block 名，必须全大家，value 是数据
+# ### 第二层，标量的 key 是整数，如25， 混合矩阵的 key 是 tuple 元组。
+# ## 读取输入文件的模板，保存在 mold_text 里
+# with open('**/Prospinoin_1.txt', 'r') as in_mold: 
 #     mold_text = in_mold.readlines()
+# ## 初始化一个 GenerateInputFile 的实例：in_file
 # in_file = GenerateInputFile(
 #                         text_mold = mold_text,
 #                         point_dict = point,
-#                         path = '**/Prospino.in.les_houches'
+#                         path = '**/Prospino.in.les_houches' #每次生成文件时保存在哪里
 #                         )
 # ## 生成一个新的输入文件
 # point['MASS'][25]=126.0 #改变参数点的值
 # in_file(point) # 这里可以把实例当函数用
-# ## 之后会在生成一个新的文件： **/Prospino.in.les_houches
+# ## 之后会在生成一个新的文件： **/Prospino.in.les_houches，
+# ## 文件中的 higgs 质量是126，NMIX混合矩阵的 1,1 元素是 0.9.
 
 from typing import Union
 from abc import ABC, abstractmethod
