@@ -8,6 +8,73 @@ SUSY phenomenology on LHC
 
 **推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
 
+## 2023/10/04
+
+更新流程图和文件结构。
+
+下面的总流程图只是一个示意，**收集结果**后的内容需要讨论，是将所有截面计算完毕后再写入 `SModelS` 输入，还是当计算完一个参数点后立刻写入 `SModelS` 输入。
+
+```mermaid
+graph LR
+    A{收集结果} --> B[将截面信息写入 SModelS 输入文件];
+    B --> C[导出结果到 CSV];
+    style A fill:#90EE90;
+    style B fill:#f9f,stroke:#333,stroke-width:4px;
+    style C fill:#90EE90;
+```
+
+```mermaid
+graph LR
+    A{收集结果} --> B[导出结果到 CSV];
+    B --> C[将截面信息写入 SModelS 输入文件];
+    style A fill:#90EE90;
+    style B fill:#90EE90;
+    style C fill:#f9f,stroke:#333,stroke-width:4px;
+```
+
+```mermaid
+graph TB
+    A[读取数据] --> B[判断 Siglino 类型];
+    B -->|计算相应情况的 ElectroWeakino 截面| C[计算截面];
+    C -->|某些 Siglino 类型个别截面不计算, 指定为 0| D{收集结果};
+    D -->|参数点的截面还没有全部计算完，继续计算| C;
+    D -->|参数点的截面全部计算完毕| E[导出结果到 CSV];
+    D --> F[将截面信息写入 SModelS 输入文件];
+    style A fill:#90EE90;
+    style B fill:#90EE90;
+    style C fill:#90EE90;
+    style D fill:#90EE90;
+    style E fill:#90EE90;
+    style F fill:#f9f,stroke:#333,stroke-width:4px;
+```
+
+下面的文件结构仅供参考
+
+- 这里把 `Program_CrossSection.py` 暂时改名为 `Program.py`
+- 文件结构中添加了 `SModelS_Input` 文件夹，用于存放 `SModelS` 输入文件
+- 文件结构中添加了 `SModelS_Output` 文件夹，用于存放 `SModelS` 输出文件
+
+```text
+Our_Program/
+├── Program.py
+├── Prospino_Input/
+│   └── ProspinoIn_1.txt
+├── Cross_Section/
+│   └── Prospino2_*/
+│      └── prospino_2.run
+├── Prospino_Run/
+│   ├── Pro2_subroutines/
+│   ├── prospino.in.les_houches
+│   └── prospino.dat
+├── Results/
+│   └── CrossSection.csv
+├── SModelS_Input/
+│   └── SModelS_1.slha
+├── SModelS_Output/
+│   └── SModelS_1.smodels
+└── slhaReaderOutput.csv
+```
+
 ## 2023/09/23
 
 更新流程图和文件结构，**浅绿色方框**中的内容为新的目标
