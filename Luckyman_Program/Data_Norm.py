@@ -1,5 +1,6 @@
 import pandas as pd
 import argparse
+import numpy as np
 
 MC_list1 = ["hh_1", "hh_2", "hh_3", "Ah_2", "Ah_3", 
             "Chi_1", "Chi_2", "Chi_3", "Chi_4", "Chi_5", "Cha_1", "Cha_2",
@@ -55,25 +56,25 @@ def Process_Data(scan_data):
             norm_data[column] = pd.Series(dtype='float64')
     norm_data["Type_Singlino"] = norm_data.loc[:, ["N15", "N25", "N35", "N45", "N55"]].apply(lambda NX5: (NX5 ** 2).idxmax(), axis=1).map(SIGLINO_TYPE_NUMBER)
     norm_data["Sel_type"] = norm_data.loc[:, ["ZE11", "ZE21", "ZE31", "ZE41", "ZE51", "ZE61"]].apply(lambda ZEX1: (ZEX1 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["SEL"])
-    norm_data["Sel"] = norm_data.apply(lambda row: row[row["Sel_type"]], axis=1)
+    norm_data["Sel"] = norm_data.apply(lambda row: row[row["Sel_type"]] if pd.notnull(row["Sel_type"]) else np.nan, axis=1)
     norm_data["Ser_type"] = norm_data.loc[:, ["ZE12", "ZE22", "ZE32", "ZE42", "ZE52", "ZE62"]].apply(lambda ZEX2: (ZEX2 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["SER"])
-    norm_data["Ser"] = norm_data.apply(lambda row: row[row["Ser_type"]], axis=1)
+    norm_data["Ser"] = norm_data.apply(lambda row: row[row["Ser_type"]] if pd.notnull(row["Ser_type"]) else np.nan, axis=1)
     norm_data["Smul_type"] = norm_data.loc[:, ["ZE13", "ZE23", "ZE33", "ZE43", "ZE53", "ZE63"]].apply(lambda ZEX3: (ZEX3 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["SMUL"])
-    norm_data["Smul"] = norm_data.apply(lambda row: row[row["Smul_type"]], axis=1)
+    norm_data["Smul"] = norm_data.apply(lambda row: row[row["Smul_type"]] if pd.notnull(row["Smul_type"]) else np.nan, axis=1)
     norm_data["Smur_type"]  = norm_data.loc[:, ["ZE14", "ZE24", "ZE34", "ZE44", "ZE54", "ZE64"]].apply(lambda ZEX4: (ZEX4 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["SMUR"])
-    norm_data["Smur"] = norm_data.apply(lambda row: row[row["Smur_type"]], axis=1)
+    norm_data["Smur"] = norm_data.apply(lambda row: row[row["Smur_type"]] if pd.notnull(row["Smur_type"]) else np.nan, axis=1)
     norm_data["Staul_type"] = norm_data.loc[:, ["ZE15", "ZE25", "ZE35", "ZE45", "ZE55", "ZE65"]].apply(lambda ZEX5: (ZEX5 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["STAUL"])
-    norm_data["Staul"] = norm_data.apply(lambda row: row[row["Staul_type"]], axis=1)
+    norm_data["Staul"] = norm_data.apply(lambda row: row[row["Staul_type"]] if pd.notnull(row["Staul_type"]) else np.nan, axis=1)
     norm_data["Staur_type"] = norm_data.loc[:, ["ZE16", "ZE26", "ZE36", "ZE46", "ZE56", "ZE66"]].apply(lambda ZEX6: (ZEX6 ** 2).idxmax(), axis=1).map(SLEPTON_TYPE_NUMBER["STAUR"])
-    norm_data["Staur"] = norm_data.apply(lambda row: row[row["Staur_type"]], axis=1)
+    norm_data["Staur"] = norm_data.apply(lambda row: row[row["Staur_type"]] if pd.notnull(row["Staur_type"]) else np.nan, axis=1)
     norm_data["Stau1"] = norm_data.apply(lambda row: min(row["Staul"], row["Staur"]), axis=1)
     norm_data["Stau2"] = norm_data.apply(lambda row: max(row["Staul"], row["Staur"]), axis=1)
     norm_data["Sve_type"] = norm_data.loc[:, ["ZV11", "ZV21", "ZV31"]].apply(lambda ZVX1: (ZVX1 ** 2).idxmax(), axis=1).map(SV_TYPE_NUMBER["SVE"])
-    norm_data["Sve"] = norm_data.apply(lambda row: row[row["Sve_type"]], axis=1)
+    norm_data["Sve"] = norm_data.apply(lambda row: row[row["Sve_type"]] if pd.notnull(row["Sve_type"]) else np.nan, axis=1)
     norm_data["Svmu_type"] = norm_data.loc[:, ["ZV12", "ZV22", "ZV32"]].apply(lambda ZVX2: (ZVX2 ** 2).idxmax(), axis=1).map(SV_TYPE_NUMBER["SVMU"])
-    norm_data["Svmu"] = norm_data.apply(lambda row: row[row["Svmu_type"]], axis=1)
+    norm_data["Svmu"] = norm_data.apply(lambda row: row[row["Svmu_type"]] if pd.notnull(row["Svmu_type"]) else np.nan, axis=1)
     norm_data["Svtau_type"] = norm_data.loc[:, ["ZV13", "ZV23", "ZV33"]].apply(lambda ZVX3: (ZVX3 ** 2).idxmax(), axis=1).map(SV_TYPE_NUMBER["SVTAU"])
-    norm_data["Svtau"] = norm_data.apply(lambda row: row[row["Svtau_type"]], axis=1)
+    norm_data["Svtau"] = norm_data.apply(lambda row: row[row["Svtau_type"]] if pd.notnull(row["Svtau_type"]) else np.nan, axis=1)
     return(norm_data[MC_list])
 
 
