@@ -4,4 +4,5 @@
 !/Our_Program/Prospino2/prospino.dat
 !/Our_Program/Prospino2/prospino_2.run
 
-# */.DS_Store # Mac file
+*/.DS_Store # Mac file
+*/__pycache__ # python run folders
