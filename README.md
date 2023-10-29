@@ -37,7 +37,7 @@ graph TB
     style I fill:#f9f,stroke:#333,stroke-width:4px;
 ```
 
-之后 Prospino 和 SModelS 的流程就将被浓缩成一个流程单元，进入到 Madgraph 和 Checkmate。 的环节。
+之后 Prospino 和 SModelS 的流程就将被浓缩成一个流程单元，进入到 Madgraph 和 Checkmate 的环节。
 
 ## 2023/10/20
 
