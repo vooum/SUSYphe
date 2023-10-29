@@ -8,6 +8,37 @@ SUSY phenomenology on LHC
 
 **推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
 
+## 2023/10/29
+
+进入到 Prospino-SModelS 的收尾工作
+
+另外，需要一个安装脚本，安装多份的 Madgraph 和 Checkmate。
+
+```mermaid
+graph TB
+    A[读取数据] --> |从第一个参数点开始|B[判断 Siglino 类型];
+    B -->|计算相应情况的 ElectroWeakino 截面| C[计算截面];
+    C -->|某些 Siglino 类型个别截面不计算, 指定为 0| D{收集结果};
+    D -->|如果参数点的截面没有全部计算完, 继续计算| C;
+    D -->|如果参数点的截面全部计算完毕| E{导出结果到 CSV};
+    E --> |计算下一个参数点的截面|B;
+    E --> F[将所有截面信息写入 SModelS 输入文件];
+    F --> G[多核运行 SModelS];
+    G --> H[收集全部 SModelS py 结果];
+    H --> I[筛选 r < 1 的结果生成下一阶段需要的输入数据]
+    style A fill:#90EE90;
+    style B fill:#90EE90;
+    style C fill:#90EE90;
+    style D fill:#90EE90;
+    style E fill:#90EE90;
+    style F fill:#f9f,stroke:#333,stroke-width:4px;
+    style G fill:#f9f,stroke:#333,stroke-width:4px;
+    style H fill:#f9f,stroke:#333,stroke-width:4px;
+    style I fill:#f9f,stroke:#333,stroke-width:4px;
+```
+
+之后 Prospino 和 SModelS 的流程就将被浓缩成一个流程单元，进入到 Madgraph 和 Checkmate。 的环节。
+
 ## 2023/10/20
 
 根据实际的推进情况，现在定为以下流程
