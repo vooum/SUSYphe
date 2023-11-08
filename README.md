@@ -62,7 +62,7 @@ graph TB
     A[为所有进程的 MadEvent 文件夹产生指定的 SL 过程] --> B[读取数据];
     B --> |从第一个参数点开始| C[判断 Siglino 类型];
     C --> D[产生相应的 ElectroWeakino 过程];
-    D --> E[为 EW 过程的 MadEvent 替换必要的 Card;<br/>运行 EW 过程的 MadEvent];
+    D --> E[为 EW 过程的 MadEvent 替换必要的 Card;运行 EW 过程的 MadEvent];
     H --> I[收集该参数点总的 CheckMATE 结果到 csv];
     I --> J{删除 CheckMATE 结果};
     J --> |模拟下一个参数点|C;
