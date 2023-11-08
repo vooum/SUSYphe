@@ -65,7 +65,7 @@ graph TB
     D --> E[为 EW 过程的 MadEvent 替换必要的 Card,<br/>运行 EW 过程的 MadEvent];
     E --> F[替换 EW 过程 CheckMATE 输入文件的 EW 截面,<br/>运行 EW 过程 CheckMATE,<br/>删除 EW 过程的事例结果];
     F --> G[删除 SL 过程的 MadEvent 中的特定文件,<br/>为 SL 过程的 MadEvent 替换必要的 Card,<br/>运行 SL 过程的 MadEvent];
-    G --> H[替换 SL 过程 CheckMATE 输入文件的 SL 截面;<br/>运行 SL 过程 CheckMATE,<br/>删除 SL 过程的事例结果];
+    G --> H[替换 SL 过程 CheckMATE 输入文件的 SL 截面,<br/>运行 SL 过程 CheckMATE,<br/>删除 SL 过程的事例结果];
     H --> I[收集该参数点总的 CheckMATE 结果到 csv];
     I --> J{删除 CheckMATE 结果};
     J --> |模拟下一个参数点|C;
