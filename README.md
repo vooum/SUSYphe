@@ -8,6 +8,90 @@ SUSY phenomenology on LHC
 
 **推送代码发起 Pull request 时一定要推送到自己对应的那个分支上，不要推送到 main 分支，否则会影响代码审核和合并的工作量。**
 
+## 2023/11/08
+
+现在开始 Madgraph 和 Checkmate 控制程序的编写
+
+**这个程序最好是直接用面向对象的方案编写，否则后期修改起来可能有些麻烦。**
+
+文件结构暂时如下：
+
+```text
+MC_Program/
+├── MC_Program.py
+├── MC_input.csv
+├── SLHA/
+│   └── SPhenoSPC_*.txt
+├── Process_script/
+│   ├── Process_EW_n1
+│   ├── Process_EW_n2
+│   ├── Process_EW_n3
+│   ├── Process_EW_n4
+│   ├── Process_EW_n5
+│   └── Process_SL
+├── MadGraph/
+│   └── MG5_aMC_v2_6_4/
+|-- Events/
+│   └── MadEvent_*
+│       ├── EW_event
+│       └── SL_event
+├── CheckMATE/
+│   └── CM_v2_26
+├── Results/
+│   └── CM_output.csv
+```
+
+`MC_input.csv` 是筛选出来需要进行 M-C 模拟的参数点信息，信息至少要包括：参数点编号，Siglino 是哪个 neutralino，提交给 CheckMATE 的截面。
+
+`SLHA/` 文件夹中放置提交给 `MadEvent` 的 slha 文件
+
+`Process_script/` 用于 `MadGraph` 产生过程脚本
+
+`MadGraph/` 文件夹内放置 `MadGraph` 程序包，可能有多份
+
+`Events/` 文件夹用虚线表示，表示该文件可能存在于任意硬盘位置上
+
+`CheckMATE/` 文件夹内放置 `CheckMATE` 程序包，肯呢个有多份
+
+`Results/` 文件夹内存放模拟的结果
+
+**大致流程：**
+
+```mermaid
+graph TB
+    A[为所有进程的 MadEvent 文件夹产生指定的 SL 过程] --> B[读取数据];
+    B --> |从第一个参数点开始| C[判断 Siglino 类型];
+    C --> D[产生相应的 ElectroWeakino 过程];
+    D --> E[为 EW 过程的 MadEvent 替换必要的 Card;
+    运行 EW 过程的 MadEvent];
+    E --> F[替换 EW 过程 CheckMATE 输入文件的 EW 截面;
+    运行 EW 过程 CheckMATE;
+    删除 EW 过程的事例结果];
+    F --> G[删除 SL 过程的 MadEvent 中的特定文件;
+    为 SL 过程的 MadEvent 替换必要的 Card;
+    运行 SL 过程的 MadEvent];
+    G --> H[替换 SL 过程 CheckMATE 输入文件的 SL 截面;
+    运行 SL 过程 CheckMATE;
+    删除 SL 过程的事例结果];
+    H --> I[收集该参数点总的 CheckMATE 结果到 csv];
+    I --> J{删除 CheckMATE 结果};
+    J --> |模拟下一个参数点|C;
+    J --> |所有参数点模拟完毕|K[进行最后的数据整理];
+    style A fill:#f9f,stroke:#333,stroke-width:4px;
+    style B fill:#f9f,stroke:#333,stroke-width:4px;
+    style C fill:#f9f,stroke:#333,stroke-width:4px;
+    style D fill:#f9f,stroke:#333,stroke-width:4px;
+    style E fill:#f9f,stroke:#333,stroke-width:4px;
+    style F fill:#f9f,stroke:#333,stroke-width:4px;
+    style G fill:#f9f,stroke:#333,stroke-width:4px;
+    style H fill:#f9f,stroke:#333,stroke-width:4px;
+    style I fill:#f9f,stroke:#333,stroke-width:4px;
+    style J fill:#f9f,stroke:#333,stroke-width:4px;
+    style K fill:#f9f,stroke:#333,stroke-width:4px;
+```
+
+> **注意：** 如果不考虑 SL 过程，那么就需要把相应的 SL 流程删除掉。
+
 ## 2023/10/29
 
 进入到 Prospino-SModelS 的收尾工作
@@ -22,7 +106,7 @@ graph TB
     D -->|如果参数点的截面没有全部计算完, 继续计算| C;
     D -->|如果参数点的截面全部计算完毕| E{导出结果到 CSV};
     E --> |计算下一个参数点的截面|B;
-    E --> F[将所有截面信息写入 SModelS 输入文件];
+    E --> |所有参数点截面计算完毕|F[将所有截面信息写入 SModelS 输入文件];
     F --> G[多核运行 SModelS];
     G --> H[收集全部 SModelS py 结果];
     H --> I[筛选 r < 1 的结果生成下一阶段需要的输入数据]
